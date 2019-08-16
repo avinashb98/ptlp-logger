@@ -1,7 +1,8 @@
 const winston = require('winston');
 
 class ExpressLogger {
-    constructor(httpContext) {
+    constructor(httpContext, service) {
+        this.service = service;
         this.setLogLevels();
         this.logLevel = this.getLogLevel();
         this.winstonLogger = winston.createLogger({
@@ -79,7 +80,7 @@ class ExpressLogger {
     formatMessage(level, message) {
         const reqId = this.httpContext.get('request-id');
         return {
-            Service: 'Init',
+            Service: this.service,
             'Request-Id': reqId,
             Message: message,
             level,

@@ -1,0 +1,28 @@
+{
+  "name": "ptlp-logger",
+  "version": "1.0.0",
+  "description": "Async Logger for Express projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avinashb98/ptlp-logger.git"
+  },
+  "author": "Avinash Bhardwaj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avinashb98/ptlp-logger/issues"
+  },
+  "homepage": "https://github.com/avinashb98/ptlp-logger#readme",
+  "dependencies": {
+    "express-http-context": "^1.2.3",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
+  }
+}

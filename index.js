@@ -83,7 +83,6 @@ class ExpressLogger {
             Service: this.service,
             'Request-Id': reqId,
             Message: message,
-            level,
         };
     }
 

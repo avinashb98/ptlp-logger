@@ -39,8 +39,10 @@ class ExpressLogger {
 
             res.on('finish', () => {
                 // log res
-                if (res.statusCode < 400 && this.logLevel === 'debug') {
-                    this.winstonLogger.crit(this.formatResponseLog('CRITICAL', res));
+                if (res.statusCode < 400) {
+                    if (this.logLevel === 'debug') {
+                        this.winstonLogger.crit(this.formatResponseLog('CRITICAL', res));
+                    }
                 } else {
                     this.winstonLogger.crit(this.formatMessage('CRITICAL', '************* ERROR ************'));
                     this.winstonLogger.crit(this.formatResponseLog('CRITICAL', res));

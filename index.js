@@ -34,19 +34,19 @@ class ExpressLogger {
 
             // log request
             if (this.logLevel === 'debug') {
-                this.winstonLogger.crit(this.formatRequestLog(req));
-                this.winstonLogger.crit(this.formatMessage('CRITICAL', `Headers from PAG ${JSON.stringify(req.headers)}`));
+                this.winstonLogger.info(this.formatRequestLog(req));
+                this.winstonLogger.info(this.formatMessage(`Headers from PAG ${JSON.stringify(req.headers)}`));
             }
 
             res.on('finish', () => {
                 // log res
                 if (res.statusCode < 400) {
                     if (this.logLevel === 'debug') {
-                        this.winstonLogger.crit(this.formatResponseLog('CRITICAL', res));
+                        this.winstonLogger.debug(this.formatResponseLog(res));
                     }
                 } else {
-                    this.winstonLogger.crit(this.formatMessage('CRITICAL', '************* ERROR ************'));
-                    this.winstonLogger.crit(this.formatResponseLog('CRITICAL', res));
+                    this.winstonLogger.error(this.formatMessage('************* ERROR ************'));
+                    this.winstonLogger.error(this.formatResponseLog(res));
                 }
             });
             next();
@@ -77,7 +77,7 @@ class ExpressLogger {
         return process.env.STAGE === 'prod' ? 'error' : 'debug';
     }
 
-    formatMessage(level, message) {
+    formatMessage(message) {
         const reqId = this.httpContext.get('request-id');
         return {
             Service: this.service,
@@ -86,8 +86,8 @@ class ExpressLogger {
         };
     }
 
-    formatResponseLog(level, response) {
-        const jsonMessage = this.formatMessage(level, response.statusMessage);
+    formatResponseLog(response) {
+        const jsonMessage = this.formatMessage(response.statusMessage);
         const timeTaken = Date.now() - this.httpContext.get('request-start-time');
         jsonMessage.TimeTaken = timeTaken;
         jsonMessage.StatusCode = response.statusCode;
@@ -95,7 +95,7 @@ class ExpressLogger {
     }
 
     formatRequestLog(req) {
-        const jsonMessage = this.formatMessage('CRITICAL');
+        const jsonMessage = this.formatMessage('');
         jsonMessage.Method = req.method;
         jsonMessage.Url = req.originalUrl || req.url;
         jsonMessage['Request-Size'] = req.headers['content-length'] ? req.headers['content-length'] : 'Not Sent By Client';
@@ -107,27 +107,27 @@ class ExpressLogger {
 
     error(...message) {
         const combinedMessage = message.join(' ');
-        this.winstonLogger.error(this.formatMessage('ERROR', combinedMessage));
+        this.winstonLogger.error(this.formatMessage(combinedMessage));
     }
 
     warning(...message) {
         const combinedMessage = message.join(' ');
-        this.winstonLogger.warning(this.formatMessage('WARNING', combinedMessage));
+        this.winstonLogger.warning(this.formatMessage(combinedMessage));
     }
 
     info(...message) {
         const combinedMessage = message.join(' ');
-        this.winstonLogger.info(this.formatMessage('INFO', combinedMessage));
+        this.winstonLogger.info(this.formatMessage(combinedMessage));
     }
 
     verbose(...message) {
         const combinedMessage = message.join(' ');
-        this.winstonLogger.debug(this.formatMessage('DEBUG', combinedMessage));
+        this.winstonLogger.debug(this.formatMessage(combinedMessage));
     }
 
     debug(...message) {
         const combinedMessage = message.join(' ');
-        this.winstonLogger.debug(this.formatMessage('DEBUG', combinedMessage));
+        this.winstonLogger.debug(this.formatMessage(combinedMessage));
     }
 }
 

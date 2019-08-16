@@ -3,11 +3,12 @@ const winston = require('winston');
 class ExpressLogger {
     constructor(httpContext) {
         this.setLogLevels();
+        this.logLevel = this.getLogLevel();
         this.winstonLogger = winston.createLogger({
             levels: winston.config.syslog.levels,
             transports: [
                 new winston.transports.Console({
-                    level: this.getLogLevel(),
+                    level: this.logLevel,
                     showLevel: false,
                 }),
             ],
@@ -31,12 +32,16 @@ class ExpressLogger {
             req.headers['Service-Counter'] = counter + 1;
 
             // log request
-            this.winstonLogger.crit(this.formatRequestLog(req));
-            this.winstonLogger.crit(this.formatMessage('CRITICAL', `Headers from PAG ${JSON.stringify(req.headers)}`));
+            if (this.logLevel === 'debug') {
+                this.winstonLogger.crit(this.formatRequestLog(req));
+                this.winstonLogger.crit(this.formatMessage('CRITICAL', `Headers from PAG ${JSON.stringify(req.headers)}`));
+            }
 
             res.on('finish', () => {
                 // log res
-                if (res.statusCode < 400) { this.winstonLogger.crit(this.formatResponseLog('CRITICAL', res)); } else {
+                if (res.statusCode < 400 && this.logLevel === 'debug') {
+                    this.winstonLogger.crit(this.formatResponseLog('CRITICAL', res));
+                } else {
                     this.winstonLogger.crit(this.formatMessage('CRITICAL', '************* ERROR ************'));
                     this.winstonLogger.crit(this.formatResponseLog('CRITICAL', res));
                 }

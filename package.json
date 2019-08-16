@@ -10,6 +10,12 @@
     "type": "git",
     "url": "git+https://github.com/avinashb98/ptlp-logger.git"
   },
+  "keywords": [
+    "express",
+    "logger",
+    "node",
+    "debug"
+  ],
   "author": "Avinash Bhardwaj",
   "license": "ISC",
   "bugs": {

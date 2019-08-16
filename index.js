@@ -3,7 +3,7 @@ const winston = require('winston');
 class ExpressLogger {
     constructor(httpContext) {
         this.setLogLevels();
-        this.winstonLogger = new winston.Logger({
+        this.winstonLogger = winston.createLogger({
             levels: winston.config.syslog.levels,
             transports: [
                 new winston.transports.Console({

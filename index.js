@@ -39,14 +39,16 @@ class ExpressLogger {
             }
 
             res.on('finish', () => {
-                // log res
-                if (res.statusCode < 400) {
-                    if (this.logLevel === 'debug') {
-                        this.winstonLogger.debug(this.formatResponseLog(res));
+                if (!process.env.TEST) {
+                    // log res
+                    if (res.statusCode < 400) {
+                        if (this.logLevel === 'debug') {
+                            this.winstonLogger.debug(this.formatResponseLog(res));
+                        }
+                    } else {
+                        this.winstonLogger.error(this.formatMessage('************* ERROR ************'));
+                        this.winstonLogger.error(this.formatResponseLog(res));
                     }
-                } else {
-                    this.winstonLogger.error(this.formatMessage('************* ERROR ************'));
-                    this.winstonLogger.error(this.formatResponseLog(res));
                 }
             });
             next();
@@ -74,7 +76,7 @@ class ExpressLogger {
         if (levelInEnv) {
             return process.env.LOG_LEVEL.trim().toLowerCase();
         }
-        return process.env.STAGE === 'prod' ? 'error' : 'debug';
+        return process.env.STAGE === 'prod' ? 'error' : 'warning';
     }
 
     formatMessage(message) {

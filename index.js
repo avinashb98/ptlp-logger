@@ -47,8 +47,8 @@ class ExpressLogger {
                         }
                     } else if (res.statusCode !== 404) { // Do not log 404 errors
                         this.winstonLogger.error(this.formatMessage('************* ERROR ************'));
-                        this.winstonLogger.info({ ...res.params, ...res.query, ...res.body });
-                        this.winstonLogger.info(this.formatResponseLog(res));
+                        this.winstonLogger.error({ ...res.params, ...res.query, ...res.body });
+                        this.winstonLogger.error(this.formatResponseLog(res));
                     }
                 }
             });

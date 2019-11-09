@@ -45,7 +45,7 @@ class ExpressLogger {
                         if (this.logLevel === 'debug') {
                             this.winstonLogger.debug(this.formatResponseLog(res));
                         }
-                    } else {
+                    } else if (res.statusCode !== 404) { // Do not log 404 errors
                         this.winstonLogger.error(this.formatMessage('************* ERROR ************'));
                         this.winstonLogger.error(this.formatResponseLog(res));
                     }

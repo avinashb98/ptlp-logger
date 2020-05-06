@@ -77,7 +77,7 @@ class ExpressLogger {
         if (levelInEnv) {
             return process.env.LOG_LEVEL.trim().toLowerCase();
         }
-        return process.env.STAGE === 'prod' ? 'error' : 'warning';
+        return process.env.STAGE === 'prod' ? 'error' : 'debug';
     }
 
     formatMessage(message) {
